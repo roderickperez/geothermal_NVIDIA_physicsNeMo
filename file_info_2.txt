@@ -1,0 +1,15 @@
+
+--- Analyzing physicsnemo-sym/examples/reservoir_simulation/3D/PACKETS/simulationstrain.mat ---
+Whos: [('perm', (2000, 1, 3, 40, 40), 'double'), ('Q', (2000, 1, 3, 40, 40), 'double'), ('Qw', (2000, 1, 3, 40, 40), 'double'), ('Phi', (2000, 1, 3, 40, 40), 'double'), ('Time', (2000, 1, 3, 40, 40), 'double'), ('Pini', (2000, 1, 3, 40, 40), 'double'), ('Swini', (2000, 1, 3, 40, 40), 'double'), ('pressure', (2000, 30, 3, 40, 40), 'double'), ('water_sat', (2000, 30, 3, 40, 40), 'double')]
+
+--- Analyzing physicsnemo-sym/examples/reservoir_simulation/3D/PACKETS/simulationstest.hdf5 ---
+Keys: ['Phi', 'Pini', 'Q', 'Qw', 'Swini', 'Time', 'perm', 'pressure', 'water_sat']
+  Phi: (2000, 1, 3, 40, 40)
+  Pini: (2000, 1, 3, 40, 40)
+  Q: (2000, 1, 3, 40, 40)
+  Qw: (2000, 1, 3, 40, 40)
+  Swini: (2000, 1, 3, 40, 40)
+  Time: (2000, 1, 3, 40, 40)
+  perm: (2000, 1, 3, 40, 40)
+  pressure: (2000, 30, 3, 40, 40)
+  water_sat: (2000, 30, 3, 40, 40)
