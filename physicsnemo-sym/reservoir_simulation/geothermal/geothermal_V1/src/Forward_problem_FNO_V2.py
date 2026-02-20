@@ -32,7 +32,7 @@ import scipy.io as sio
 
 torch.set_default_dtype(torch.float32)
 
-@physicsnemo.sym.main(config_path="conf", config_name="config_FNO_V2_V2")
+@physicsnemo.sym.main(config_path="conf", config_name="config_FNO_V2")
 def run(cfg: PhysicsNeMoConfig) -> None:
     print("\n|-----------------------------------------------------------------|")
     print("|          TRAIN THE MODEL USING A 3D FNO APPROACH (V7 GEO)       |")

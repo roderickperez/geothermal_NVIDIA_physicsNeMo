@@ -28,16 +28,16 @@ batch_size:
   test: 20
 
 optimizer:
-  weight_decay: 1e-4
-  lr: 1e-3
+  weight_decay: 0.0
+  lr: 5e-4
 
 cuda_graphs: false
 jit: false
 
 custom:
   gradient_method: fdm
-  ntrain: 800
-  nval: 1
+  ntrain: 750
+  nval: 50
   ntest: 200
   max_iter: 60000 
   NVRS:
