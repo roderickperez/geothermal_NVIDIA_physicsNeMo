@@ -80,3 +80,4 @@ selected key: temperature, mean: 3.49012e+02, std: 3.06824e+01
 [22:47:31] - [step:       2300] loss:  3.850e+07, time/iteration:  2.443e+02 ms
 [22:47:56] - [step:       2400] loss:  5.053e+07, time/iteration:  2.441e+02 ms
 [22:48:20] - [step:       2500] loss:  7.811e+07, time/iteration:  2.448e+02 ms
+[22:48:45] - [step:       2600] loss:  3.066e+07, time/iteration:  2.467e+02 ms
