@@ -278,3 +278,39 @@ Run each model independently:
 ./train.sh pino_m4  # Run M4 (2 Phases, auto-resume)
 ```
 
+## Advanced Consideration: "Delta Prediction"
+If you run the 60k training with `weight_decay: 0.0` and the model still produces flat colors, the issue is fundamental to how you are formulating the problem.
+
+Currently, the model predicts Absolute Pressure (e.g., 250 Bar). Because the background pressure (250) is massive compared to the injection change (+5 Bar), the model ignores the change.
+
+**The "Scientist" Fix:** In this code version, we changed the architecture so the model predicts $\Delta P$ (the change in pressure), not absolute pressure.
+
+The model predicts: `delta_p` (Values ranging from -5 to +5).
+You calculate absolute: `final_p = Pini + delta_p`
+
+### The Mathematical Reason Why This Works
+When your model predicts Absolute Pressure, it is looking at values around 250 Bar. The actual fluid flow (the injection plume) only changes the pressure by about ~1 to 5 Bar. Because the MSE loss function is trying to optimize the massive 250 Bar background, it treats the tiny 1 Bar plume as "mathematical noise" and ignores it, resulting in a flat, solid-color prediction.
+
+By subtracting the Initial Pressure ($P_{ini}$) before training, the background becomes 0 Bar, and the plume becomes the only signal the network sees. The network is forced to learn the fluid flow, effectively eliminating the risk of Mean Collapse.
+
+
+## Identifying Dynamic Well Locations for Plotting
+Because the DARTS simulation randomizes well coordinates for every sample, you cannot hardcode the injector/producer locations when visualizing your results (e.g., `[1, 24]`).
+
+To accurately overlay the wells on your prediction maps, you must dynamically read the sparse `Q` tensor of that exact sample:
+
+```python
+# Extract the Q mass-rate map for your test sample [X, Y, Z]
+q_tensor = invar["Q"][idx]
+q_sum = np.sum(q_tensor, axis=2) # Sum across Z layers
+
+# Max Positive = Injector. Min Negative = Producer.
+inj_loc = np.unravel_index(np.argmax(q_sum), q_sum.shape)
+prod_loc = np.unravel_index(np.argmin(q_sum), q_sum.shape)
+
+# Crucial: Matplotlib scatter(x, y) expects (Column, Row).
+# unravel_index returns (Row, Column). You must swap them!
+plt.scatter(inj_loc[1], inj_loc[0], c='blue', marker='o')
+plt.scatter(prod_loc[1], prod_loc[0], c='red', marker='X')
+```
+

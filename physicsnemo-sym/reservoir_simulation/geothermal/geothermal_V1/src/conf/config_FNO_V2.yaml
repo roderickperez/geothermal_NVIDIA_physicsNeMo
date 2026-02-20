@@ -1,0 +1,114 @@
+# SPDX-FileCopyrightText: Copyright (c) 2023 - 2024 NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+defaults :
+  - physicsnemo_default  
+  - scheduler: tf_exponential_lr
+  - optimizer: adam
+  - loss: sum
+  - _self_
+
+# OVERRIDE standard PhysicsNeMo defaults
+batch_size:
+  grid: 20
+  validation: 20
+  test: 20
+
+optimizer:
+  weight_decay: 1e-4
+  lr: 1e-3
+
+cuda_graphs: false
+jit: false
+
+custom:
+  gradient_method: fdm
+  ntrain: 800
+  nval: 1
+  ntest: 200
+  max_iter: 60000 
+  NVRS:
+    nx: 32
+    ny: 32
+    nz: 5
+    DX: 20.0 
+    DY: 20.0 
+    DZ: 20.0
+    pini_alt: 250.0  # Base Pressure
+    tini_alt: 373.15 # Base Temperature
+ 
+    mpor: 0.05 
+    hpor: 0.5 
+
+    PATM: 14.6959
+ 
+    # training
+    LUB: 0.1 
+    HUB: 1 
+    aay: 50 
+    bby: 500 
+   
+    batch_size: 20 
+    timmee: 365.
+    max_t: 10950.
+    MAXZ: 6000 
+    factorr: 0.1 
+    LIR: 200 
+    UIR: 2000 
+    input_channel: 7
+    state_names: ['pressure', 'temperature']
+    
+    normalization:
+      pressure: 
+        scale: 300.0
+        shift: 0.0
+      temperature: 
+        scale: 80.0   
+        shift: 300.0
+    
+  WELLSPECS:
+    water_injector_wells: 
+    - [1, 24,'I1']
+    - [3, 3,'I2']
+    - [31, 1,'I3']
+    - [31, 31,'I4']
+
+    producer_wells:
+    - [7, 9,'P1']
+    - [14, 12,'P2']
+    - [28, 19,'P3']
+    - [14, 27,'P4']
+network_dir : "ResSim_V2"
+
+scheduler:
+  decay_rate: 0.95
+  decay_steps: 1000
+  
+
+training:
+  rec_results_freq : 10000
+  max_steps : 60000
+  rec_constraint_freq: 10000 
+
+
+loss:
+  weights:
+    pressure: 1.0
+    temperature: 10.0
+
+
+
+
