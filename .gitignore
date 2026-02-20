@@ -1,0 +1,34 @@
+# Python environments
+.venv/
+venv/
+env/
+.env
+
+# Datasets and Outputs
+*.mat
+*.hdf5
+PACKETS/
+outputs/
+archived_logs/
+COMPARE_RESULTS/
+*.pth
+*.csv
+
+# Python/C++ Binaries & Caches
+__pycache__/
+*.pyc
+*.so
+*.o
+*.dll
+*.dylib
+.pytest_cache/
+
+# Images/Media
+*.png
+*.gif
+*.jpg
+
+# Editor / IDE caches
+.vscode/
+.idea/
+.ipynb_checkpoints/

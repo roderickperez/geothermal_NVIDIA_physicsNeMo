@@ -1,0 +1,222 @@
+[0;34m[INFO][0m Activating environment...
+[0;34m[INFO][0m Running FNO Baseline...
+2026-02-20 20:50:12.111304: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+/home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/.venv/lib/python3.13/site-packages/hydra/_internal/hydra.py:119: UserWarning: Future Hydra versions will no longer change working directory at job runtime by default.
+See https://hydra.cc/docs/1.2/upgrades/1.1_to_1.2/changes_to_job_working_dir/ for more information.
+  ret = run_job(
+[W220 20:50:17.428105189 init.cpp:767] Warning: nvfuser is no longer supported in torch script, use _jit_set_nvfuser_enabled is deprecated and a no-op (function operator())
+[20:50:17] - JitManager: {'_enabled': False, '_arch_mode': <JitArchMode.ONLY_ACTIVATION: 1>, '_use_nvfuser': True, '_autograd_nodes': False}
+[20:50:17] - GraphManager: {'_func_arch': False, '_debug': False, '_func_arch_allow_partial_hessian': True}
+[20:50:17] - AmpManager: {'_enabled': False, '_mode': <AmpMode.PER_ORDER_SCALER: 0>, '_dtype': torch.float16, '_default_max_scale': 1, '_autocast_activation': False, '_autocast_firstlayer': False, '_special_terms': [], '_custom_max_scales': {}}
+/home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/physicsnemo-sym/physicsnemo/sym/amp.py:219: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  super().__init__(*args, **kwargs)
+
+|-----------------------------------------------------------------|
+|          TRAIN THE MODEL USING A 3D FNO APPROACH (V7 GEO)       |
+|-----------------------------------------------------------------|
+
+[1/3] Checking Data Integrity...
+   -> Using existing /home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/physicsnemo-sym/examples/reservoir_simulation/geothermal/geothermal_V1/src/../PACKETS/Training4.hdf5
+   -> Using existing /home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/physicsnemo-sym/examples/reservoir_simulation/geothermal/geothermal_V1/src/../PACKETS/Test4.hdf5
+
+[2/3] Configuring Keys & Normalization...
+
+[3/3] Loading Datasets...
+loaded: /home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/physicsnemo-sym/examples/reservoir_simulation/geothermal/geothermal_V1/src/../PACKETS/Training4.hdf5
+avaliable keys: ['Phi', 'Pini', 'Q', 'Qw', 'Time', 'Tini', 'perm', 'pressure', 'temperature']
+selected key: perm, mean: 6.77366e+02, std: 7.24157e+02
+selected key: Q, mean: 3.87430e-10, std: 2.02157e+01
+selected key: Qw, mean: 1.78019e-01, std: 7.37335e+00
+selected key: Phi, mean: 1.94944e-01, std: 6.30312e-02
+selected key: Time, mean: 5.00000e-01, std: 2.97842e-01
+selected key: Pini, mean: 2.49551e+02, std: 7.32404e+00
+selected key: Tini, mean: 3.72874e+02, std: 1.07197e+01
+selected key: pressure, mean: 1.55661e+02, std: 2.65010e+01
+selected key: temperature, mean: 3.49412e+02, std: 3.04702e+01
+loaded: /home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/physicsnemo-sym/examples/reservoir_simulation/geothermal/geothermal_V1/src/../PACKETS/Test4.hdf5
+avaliable keys: ['Phi', 'Pini', 'Q', 'Qw', 'Time', 'Tini', 'perm', 'pressure', 'temperature']
+selected key: perm, mean: 7.08814e+02, std: 7.44183e+02
+selected key: Q, mean: -2.38419e-10, std: 2.05901e+01
+selected key: Qw, mean: 1.75015e-01, std: 7.30086e+00
+selected key: Phi, mean: 1.98123e-01, std: 6.48860e-02
+selected key: Time, mean: 5.00000e-01, std: 2.97842e-01
+selected key: Pini, mean: 2.50026e+02, std: 6.76080e+00
+selected key: Tini, mean: 3.72647e+02, std: 1.08107e+01
+selected key: pressure, mean: 1.53567e+02, std: 2.81408e+01
+selected key: temperature, mean: 3.49012e+02, std: 3.06824e+01
+[20:50:20] - attempting to restore from: outputs/Forward_problem_FNO/ResSim
+[20:50:20] - optimizer checkpoint not found
+[20:50:20] - model fno_forward_model_pressure.0.pth not found
+[20:50:20] - model fno_forward_model_temperature.0.pth not found
+[20:50:22] - [step:          0] record constraint batch time:  4.081e-01s
+[20:50:25] - [step:          0] record validators time:  3.516e+00s
+[20:50:26] - [step:          0] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[20:50:26] - [step:          0] loss:  2.048e+07
+[20:51:30] - [step:        100] loss:  2.198e+06, time/iteration:  6.382e+02 ms
+[20:52:33] - [step:        200] loss:  2.249e+06, time/iteration:  6.348e+02 ms
+[20:53:37] - [step:        300] loss:  2.773e+06, time/iteration:  6.348e+02 ms
+[20:54:40] - [step:        400] loss:  2.541e+06, time/iteration:  6.340e+02 ms
+[20:55:41] - [step:        500] loss:  2.467e+06, time/iteration:  6.035e+02 ms
+[20:56:06] - [step:        600] loss:  2.415e+06, time/iteration:  2.507e+02 ms
+[20:56:31] - [step:        700] loss:  1.941e+06, time/iteration:  2.504e+02 ms
+[20:56:56] - [step:        800] loss:  2.272e+06, time/iteration:  2.498e+02 ms
+[20:57:21] - [step:        900] loss:  2.424e+06, time/iteration:  2.498e+02 ms
+[20:57:46] - [step:       1000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[20:57:46] - [step:       1000] loss:  2.335e+06, time/iteration:  2.591e+02 ms
+[20:58:12] - [step:       1100] loss:  2.476e+06, time/iteration:  2.505e+02 ms
+[20:58:37] - [step:       1200] loss:  1.828e+06, time/iteration:  2.504e+02 ms
+[20:59:02] - [step:       1300] loss:  2.021e+06, time/iteration:  2.505e+02 ms
+[20:59:27] - [step:       1400] loss:  2.171e+06, time/iteration:  2.505e+02 ms
+[20:59:52] - [step:       1500] loss:  1.925e+06, time/iteration:  2.506e+02 ms
+[21:00:17] - [step:       1600] loss:  2.255e+06, time/iteration:  2.507e+02 ms
+[21:00:42] - [step:       1700] loss:  2.582e+06, time/iteration:  2.535e+02 ms
+[21:01:07] - [step:       1800] loss:  2.196e+06, time/iteration:  2.520e+02 ms
+[21:01:32] - [step:       1900] loss:  1.718e+06, time/iteration:  2.514e+02 ms
+[21:01:59] - [step:       2000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[21:01:59] - [step:       2000] loss:  1.998e+06, time/iteration:  2.610e+02 ms
+[21:02:24] - [step:       2100] loss:  2.549e+06, time/iteration:  2.494e+02 ms
+[21:02:49] - [step:       2200] loss:  1.968e+06, time/iteration:  2.512e+02 ms
+[21:03:14] - [step:       2300] loss:  2.100e+06, time/iteration:  2.492e+02 ms
+[21:03:38] - [step:       2400] loss:  2.275e+06, time/iteration:  2.484e+02 ms
+[21:04:04] - [step:       2500] loss:  2.178e+06, time/iteration:  2.525e+02 ms
+[21:04:28] - [step:       2600] loss:  2.199e+06, time/iteration:  2.474e+02 ms
+[21:04:54] - [step:       2700] loss:  2.190e+06, time/iteration:  2.536e+02 ms
+[21:05:19] - [step:       2800] loss:  2.431e+06, time/iteration:  2.519e+02 ms
+[21:05:44] - [step:       2900] loss:  2.080e+06, time/iteration:  2.514e+02 ms
+[21:06:10] - [step:       3000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[21:06:10] - [step:       3000] loss:  2.007e+06, time/iteration:  2.616e+02 ms
+[21:06:35] - [step:       3100] loss:  2.527e+06, time/iteration:  2.511e+02 ms
+[21:07:00] - [step:       3200] loss:  2.132e+06, time/iteration:  2.512e+02 ms
+[21:07:26] - [step:       3300] loss:  2.198e+06, time/iteration:  2.532e+02 ms
+[21:07:51] - [step:       3400] loss:  2.200e+06, time/iteration:  2.526e+02 ms
+[21:08:17] - [step:       3500] loss:  2.127e+06, time/iteration:  2.554e+02 ms
+[21:08:42] - [step:       3600] loss:  1.857e+06, time/iteration:  2.554e+02 ms
+[21:09:07] - [step:       3700] loss:  2.272e+06, time/iteration:  2.537e+02 ms
+[21:09:33] - [step:       3800] loss:  1.919e+06, time/iteration:  2.521e+02 ms
+[21:09:58] - [step:       3900] loss:  1.861e+06, time/iteration:  2.530e+02 ms
+[21:10:24] - [step:       4000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[21:10:24] - [step:       4000] loss:  1.947e+06, time/iteration:  2.638e+02 ms
+[21:10:50] - [step:       4100] loss:  2.317e+06, time/iteration:  2.525e+02 ms
+[21:11:15] - [step:       4200] loss:  2.279e+06, time/iteration:  2.550e+02 ms
+[21:11:41] - [step:       4300] loss:  2.045e+06, time/iteration:  2.539e+02 ms
+[21:12:06] - [step:       4400] loss:  2.093e+06, time/iteration:  2.514e+02 ms
+[21:12:31] - [step:       4500] loss:  2.019e+06, time/iteration:  2.511e+02 ms
+[21:12:55] - [step:       4600] loss:  2.308e+06, time/iteration:  2.461e+02 ms
+[21:13:20] - [step:       4700] loss:  2.207e+06, time/iteration:  2.460e+02 ms
+[21:13:45] - [step:       4800] loss:  2.464e+06, time/iteration:  2.468e+02 ms
+[21:14:09] - [step:       4900] loss:  2.191e+06, time/iteration:  2.480e+02 ms
+[21:14:35] - [step:       5000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[21:14:35] - [step:       5000] loss:  1.848e+06, time/iteration:  2.562e+02 ms
+[21:15:00] - [step:       5100] loss:  2.229e+06, time/iteration:  2.468e+02 ms
+[21:15:25] - [step:       5200] loss:  2.355e+06, time/iteration:  2.479e+02 ms
+[21:15:49] - [step:       5300] loss:  2.091e+06, time/iteration:  2.456e+02 ms
+[21:16:14] - [step:       5400] loss:  2.462e+06, time/iteration:  2.458e+02 ms
+[21:16:38] - [step:       5500] loss:  1.776e+06, time/iteration:  2.456e+02 ms
+[21:17:03] - [step:       5600] loss:  1.853e+06, time/iteration:  2.457e+02 ms
+[21:17:27] - [step:       5700] loss:  2.116e+06, time/iteration:  2.461e+02 ms
+[21:17:52] - [step:       5800] loss:  1.526e+06, time/iteration:  2.452e+02 ms
+[21:18:16] - [step:       5900] loss:  2.512e+06, time/iteration:  2.454e+02 ms
+[21:18:42] - [step:       6000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[21:18:42] - [step:       6000] loss:  1.857e+06, time/iteration:  2.576e+02 ms
+[21:19:07] - [step:       6100] loss:  2.243e+06, time/iteration:  2.503e+02 ms
+[21:19:32] - [step:       6200] loss:  1.696e+06, time/iteration:  2.483e+02 ms
+[21:19:57] - [step:       6300] loss:  2.101e+06, time/iteration:  2.448e+02 ms
+[21:20:21] - [step:       6400] loss:  1.998e+06, time/iteration:  2.440e+02 ms
+[21:20:45] - [step:       6500] loss:  2.273e+06, time/iteration:  2.445e+02 ms
+[21:21:10] - [step:       6600] loss:  2.185e+06, time/iteration:  2.475e+02 ms
+[21:21:35] - [step:       6700] loss:  1.910e+06, time/iteration:  2.496e+02 ms
+[21:22:00] - [step:       6800] loss:  1.832e+06, time/iteration:  2.493e+02 ms
+[21:22:25] - [step:       6900] loss:  1.750e+06, time/iteration:  2.491e+02 ms
+[21:22:51] - [step:       7000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[21:22:51] - [step:       7000] loss:  1.829e+06, time/iteration:  2.647e+02 ms
+[21:23:17] - [step:       7100] loss:  1.393e+06, time/iteration:  2.512e+02 ms
+[21:23:41] - [step:       7200] loss:  2.292e+06, time/iteration:  2.492e+02 ms
+[21:24:06] - [step:       7300] loss:  1.941e+06, time/iteration:  2.488e+02 ms
+[21:24:31] - [step:       7400] loss:  2.170e+06, time/iteration:  2.487e+02 ms
+[21:24:56] - [step:       7500] loss:  2.194e+06, time/iteration:  2.486e+02 ms
+[21:25:21] - [step:       7600] loss:  1.911e+06, time/iteration:  2.485e+02 ms
+[21:25:46] - [step:       7700] loss:  2.302e+06, time/iteration:  2.485e+02 ms
+[21:26:11] - [step:       7800] loss:  2.348e+06, time/iteration:  2.484e+02 ms
+[21:26:35] - [step:       7900] loss:  2.217e+06, time/iteration:  2.479e+02 ms
+[21:27:01] - [step:       8000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[21:27:01] - [step:       8000] loss:  2.286e+06, time/iteration:  2.582e+02 ms
+[21:27:26] - [step:       8100] loss:  2.167e+06, time/iteration:  2.475e+02 ms
+[21:27:51] - [step:       8200] loss:  2.366e+06, time/iteration:  2.473e+02 ms
+[21:28:15] - [step:       8300] loss:  1.831e+06, time/iteration:  2.473e+02 ms
+[21:28:40] - [step:       8400] loss:  1.849e+06, time/iteration:  2.474e+02 ms
+[21:29:05] - [step:       8500] loss:  1.967e+06, time/iteration:  2.474e+02 ms
+[21:29:30] - [step:       8600] loss:  1.819e+06, time/iteration:  2.473e+02 ms
+[21:29:54] - [step:       8700] loss:  1.566e+06, time/iteration:  2.471e+02 ms
+[21:30:19] - [step:       8800] loss:  1.720e+06, time/iteration:  2.471e+02 ms
+[21:30:44] - [step:       8900] loss:  2.371e+06, time/iteration:  2.470e+02 ms
+[21:31:09] - [step:       9000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[21:31:09] - [step:       9000] loss:  1.727e+06, time/iteration:  2.566e+02 ms
+[21:31:34] - [step:       9100] loss:  2.079e+06, time/iteration:  2.466e+02 ms
+[21:31:59] - [step:       9200] loss:  2.052e+06, time/iteration:  2.468e+02 ms
+[21:32:23] - [step:       9300] loss:  2.597e+06, time/iteration:  2.467e+02 ms
+[21:32:48] - [step:       9400] loss:  2.340e+06, time/iteration:  2.466e+02 ms
+[21:33:13] - [step:       9500] loss:  2.143e+06, time/iteration:  2.467e+02 ms
+[21:33:37] - [step:       9600] loss:  1.955e+06, time/iteration:  2.467e+02 ms
+[21:34:02] - [step:       9700] loss:  1.852e+06, time/iteration:  2.466e+02 ms
+[21:34:27] - [step:       9800] loss:  1.605e+06, time/iteration:  2.466e+02 ms
+[21:34:51] - [step:       9900] loss:  1.950e+06, time/iteration:  2.464e+02 ms
+[21:35:16] - [step:      10000] record constraint batch time:  1.518e-01s
+[21:35:18] - [step:      10000] record validators time:  1.693e+00s
+[21:35:19] - [step:      10000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[21:35:19] - [step:      10000] loss:  2.171e+06, time/iteration:  2.755e+02 ms
+[21:35:44] - [step:      10100] loss:  2.279e+06, time/iteration:  2.461e+02 ms
+[21:36:08] - [step:      10200] loss:  2.032e+06, time/iteration:  2.481e+02 ms
+[21:36:33] - [step:      10300] loss:  2.153e+06, time/iteration:  2.497e+02 ms
+[21:36:58] - [step:      10400] loss:  1.876e+06, time/iteration:  2.480e+02 ms
+[21:37:23] - [step:      10500] loss:  1.672e+06, time/iteration:  2.482e+02 ms
+[21:37:48] - [step:      10600] loss:  2.069e+06, time/iteration:  2.489e+02 ms
+[21:38:13] - [step:      10700] loss:  2.179e+06, time/iteration:  2.489e+02 ms
+[21:38:38] - [step:      10800] loss:  1.951e+06, time/iteration:  2.481e+02 ms
+[21:39:02] - [step:      10900] loss:  2.214e+06, time/iteration:  2.488e+02 ms
+[21:39:28] - [step:      11000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[21:39:28] - [step:      11000] loss:  2.271e+06, time/iteration:  2.567e+02 ms
+[21:39:53] - [step:      11100] loss:  2.028e+06, time/iteration:  2.479e+02 ms
+[21:40:18] - [step:      11200] loss:  1.761e+06, time/iteration:  2.497e+02 ms
+[21:40:43] - [step:      11300] loss:  1.744e+06, time/iteration:  2.477e+02 ms
+[21:41:08] - [step:      11400] loss:  2.157e+06, time/iteration:  2.494e+02 ms
+[21:41:33] - [step:      11500] loss:  1.661e+06, time/iteration:  2.521e+02 ms
+[21:41:58] - [step:      11600] loss:  2.215e+06, time/iteration:  2.487e+02 ms
+[21:42:23] - [step:      11700] loss:  2.152e+06, time/iteration:  2.492e+02 ms
+[21:42:47] - [step:      11800] loss:  2.133e+06, time/iteration:  2.480e+02 ms
+[21:43:12] - [step:      11900] loss:  2.027e+06, time/iteration:  2.479e+02 ms
+[21:43:38] - [step:      12000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[21:43:38] - [step:      12000] loss:  1.987e+06, time/iteration:  2.573e+02 ms
+[21:44:03] - [step:      12100] loss:  1.900e+06, time/iteration:  2.478e+02 ms
+[21:44:27] - [step:      12200] loss:  2.648e+06, time/iteration:  2.477e+02 ms
+[21:44:53] - [step:      12300] loss:  2.122e+06, time/iteration:  2.514e+02 ms
+[21:45:17] - [step:      12400] loss:  2.243e+06, time/iteration:  2.486e+02 ms
+[21:45:42] - [step:      12500] loss:  1.986e+06, time/iteration:  2.457e+02 ms
+[21:46:06] - [step:      12600] loss:  1.549e+06, time/iteration:  2.443e+02 ms
+[21:46:31] - [step:      12700] loss:  1.315e+06, time/iteration:  2.445e+02 ms
+[21:46:55] - [step:      12800] loss:  1.617e+06, time/iteration:  2.456e+02 ms
+[21:47:20] - [step:      12900] loss:  1.767e+06, time/iteration:  2.433e+02 ms
+Traceback (most recent call last):
+  File "/home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/.venv/lib/python3.13/site-packages/hydra/_internal/utils.py", line 220, in run_and_report
+    return func()
+  File "/home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/.venv/lib/python3.13/site-packages/hydra/_internal/utils.py", line 458, in <lambda>
+    lambda: hydra.run(
+            ~~~~~~~~~^
+        config_name=config_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+        task_function=task_function,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        overrides=overrides,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/.venv/lib/python3.13/site-packages/hydra/_internal/hydra.py", line 119, in run
+    ret = run_job(
+        hydra_context=HydraContext(
+    ...<6 lines>...
+        configure_logging=with_log_configuration,
+    )
+  File "/home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/.venv/lib/python3.13/site-packages/hydra/core/utils.py", line 202, in run_job
+    os.chdir(old_cwd)
+    ~~~~~~~~^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/physicsnemo-sym/examples/reservoir_simulation/geothermal/geothermal_V1/src'

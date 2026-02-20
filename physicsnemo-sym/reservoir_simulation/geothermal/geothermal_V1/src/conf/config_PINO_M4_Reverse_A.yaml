@@ -1,0 +1,18 @@
+defaults :
+  - config_PINO
+  - _self_
+
+network_dir: "ResSim_M4_Reverse"
+
+custom:
+  max_iter: 30000
+
+training:
+  max_steps: 30000
+
+loss:
+  weights:
+    pressure: 0.0        # Data OFF
+    f_pressure: 1.0      # Physics ON
+    temperature: 0.0     # Data OFF
+    f_temperature: 1.0   # Physics ON

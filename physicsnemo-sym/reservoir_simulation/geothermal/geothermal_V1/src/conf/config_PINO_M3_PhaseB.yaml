@@ -1,0 +1,18 @@
+defaults :
+  - config_PINO
+  - _self_
+
+network_dir: "ResSim_M3_Curriculum"
+
+custom:
+  max_iter: 60000
+
+training:
+  max_steps: 60000
+
+loss:
+  weights:
+    pressure: 20.0
+    f_pressure: 1.0      # Physics ON
+    temperature: 10.0
+    f_temperature: 1.0   # Physics ON
