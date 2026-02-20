@@ -1,7 +1,0 @@
-
---- Analyzing physicsnemo-sym/examples/reservoir_simulation/3D/PACKETS/Training4.mat ---
-Keys: ['INPUT', 'OUTPUT']
-  INPUT: (2000, 7, 40, 40, 3)
-  OUTPUT: (2000, 60, 40, 40, 3)
-
---- Analyzing physicsnemo-sym/examples/reservoir_simulation/3D/PACKETS/simulationstrain.mat ---
