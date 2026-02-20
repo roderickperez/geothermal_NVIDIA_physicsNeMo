@@ -1,0 +1,29 @@
+nohup: ignoring input
+Loading ../PACKETS/Training4.hdf5...
+loaded: /home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/physicsnemo-sym/reservoir_simulation/geothermal/geothermal_V1/src/../PACKETS/Training4.hdf5
+avaliable keys: ['Phi', 'Pini', 'Q', 'Qw', 'Time', 'Tini', 'perm', 'pressure', 'temperature']
+selected key: perm, mean: 3.26037e+02, std: 5.07014e+02
+selected key: Q, mean: 0.00000e+00, std: 1.37586e+01
+selected key: Qw, mean: 2.31304e-01, std: 8.28165e+00
+selected key: Phi, mean: 1.64068e-01, std: 6.11512e-02
+selected key: Time, mean: 5.00000e-01, std: 2.97842e-01
+selected key: Pini, mean: 2.53437e+02, std: 7.52465e+00
+selected key: Tini, mean: 3.73089e+02, std: 4.57091e+00
+selected key: pressure, mean: 1.74936e+02, std: 1.87855e+01
+selected key: temperature, mean: 3.45173e+02, std: 3.47136e+01
+Loading ../PACKETS/Test4.hdf5...
+loaded: /home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/physicsnemo-sym/reservoir_simulation/geothermal/geothermal_V1/src/../PACKETS/Test4.hdf5
+avaliable keys: ['Phi', 'Pini', 'Q', 'Qw', 'Time', 'Tini', 'perm', 'pressure', 'temperature']
+selected key: perm, mean: 6.10809e+02, std: 6.11669e+02
+selected key: Q, mean: 0.00000e+00, std: 1.86209e+01
+selected key: Qw, mean: 2.03284e-01, std: 7.78386e+00
+selected key: Phi, mean: 2.04199e-01, std: 5.47157e-02
+selected key: Time, mean: 5.00000e-01, std: 2.97842e-01
+selected key: Pini, mean: 2.49131e+02, std: 9.41081e+00
+selected key: Tini, mean: 3.81334e+02, std: 2.34180e+00
+selected key: pressure, mean: 1.16267e+02, std: 1.20832e+00
+selected key: temperature, mean: 3.50169e+02, std: 3.49885e+01
+Loading OLD 60K Model from outputs/Forward_problem_PINO/ResSim...
+Model loaded successfully.
+
+Saved comparison to COMPARE_RESULTS/Global/Overfitting_Analysis_Old_60k.png

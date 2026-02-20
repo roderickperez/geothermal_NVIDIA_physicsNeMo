@@ -1,0 +1,82 @@
+nohup: ignoring input
+[0;34m[INFO][0m Running FNO Baseline...
+2026-02-20 22:37:50.335749: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+/home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/.venv/lib/python3.13/site-packages/hydra/_internal/hydra.py:119: UserWarning: Future Hydra versions will no longer change working directory at job runtime by default.
+See https://hydra.cc/docs/1.2/upgrades/1.1_to_1.2/changes_to_job_working_dir/ for more information.
+  ret = run_job(
+[W220 22:37:58.625319667 init.cpp:767] Warning: nvfuser is no longer supported in torch script, use _jit_set_nvfuser_enabled is deprecated and a no-op (function operator())
+[22:37:58] - JitManager: {'_enabled': False, '_arch_mode': <JitArchMode.ONLY_ACTIVATION: 1>, '_use_nvfuser': True, '_autograd_nodes': False}
+[22:37:58] - GraphManager: {'_func_arch': False, '_debug': False, '_func_arch_allow_partial_hessian': True}
+[22:37:58] - AmpManager: {'_enabled': False, '_mode': <AmpMode.PER_ORDER_SCALER: 0>, '_dtype': torch.float16, '_default_max_scale': 1, '_autocast_activation': False, '_autocast_firstlayer': False, '_special_terms': [], '_custom_max_scales': {}}
+/home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/physicsnemo-sym/physicsnemo/sym/amp.py:219: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  super().__init__(*args, **kwargs)
+
+|-----------------------------------------------------------------|
+|          TRAIN THE MODEL USING A 3D FNO APPROACH (V7 GEO)       |
+|-----------------------------------------------------------------|
+
+[1/3] Checking Data Integrity...
+   -> Using existing /home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/physicsnemo-sym/reservoir_simulation/geothermal/geothermal_V1/src/../PACKETS/Training4.hdf5
+   -> Using existing /home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/physicsnemo-sym/reservoir_simulation/geothermal/geothermal_V1/src/../PACKETS/Test4.hdf5
+
+[2/3] Configuring Keys & Normalization...
+
+[3/3] Loading Datasets...
+loaded: /home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/physicsnemo-sym/reservoir_simulation/geothermal/geothermal_V1/src/../PACKETS/Training4.hdf5
+avaliable keys: ['Phi', 'Pini', 'Q', 'Qw', 'Time', 'Tini', 'perm', 'pressure', 'temperature']
+selected key: perm, mean: 6.71064e+02, std: 7.19555e+02
+selected key: Q, mean: 6.35783e-10, std: 2.02137e+01
+selected key: Qw, mean: 1.78215e-01, std: 7.37544e+00
+selected key: Phi, mean: 1.94407e-01, std: 6.28912e-02
+selected key: Time, mean: 5.00000e-01, std: 2.97842e-01
+selected key: Pini, mean: 2.49433e+02, std: 7.31539e+00
+selected key: Tini, mean: 3.72725e+02, std: 1.06776e+01
+selected key: pressure, mean: 1.55818e+02, std: 2.66224e+01
+selected key: temperature, mean: 3.49321e+02, std: 3.04247e+01
+loaded: /home/roderickperez/DataScienceProjects/NVIDIA_physicsNemo_Sym/physicsnemo-sym/reservoir_simulation/geothermal/geothermal_V1/src/../PACKETS/Test4.hdf5
+avaliable keys: ['Phi', 'Pini', 'Q', 'Qw', 'Time', 'Tini', 'perm', 'pressure', 'temperature']
+selected key: perm, mean: 7.08814e+02, std: 7.44183e+02
+selected key: Q, mean: -2.38419e-10, std: 2.05901e+01
+selected key: Qw, mean: 1.75015e-01, std: 7.30086e+00
+selected key: Phi, mean: 1.98123e-01, std: 6.48860e-02
+selected key: Time, mean: 5.00000e-01, std: 2.97842e-01
+selected key: Pini, mean: 2.50026e+02, std: 6.76080e+00
+selected key: Tini, mean: 3.72647e+02, std: 1.08107e+01
+selected key: pressure, mean: 1.53567e+02, std: 2.81408e+01
+selected key: temperature, mean: 3.49012e+02, std: 3.06824e+01
+[22:38:02] - attempting to restore from: outputs/Forward_problem_FNO/ResSim
+[22:38:02] - optimizer checkpoint not found
+[22:38:02] - model fno_forward_model_delta_pressure.0.pth not found
+[22:38:02] - model fno_forward_model_delta_temperature.0.pth not found
+[22:38:04] - [step:          0] record constraint batch time:  4.690e-01s
+[22:38:07] - [step:          0] record validators time:  2.744e+00s
+[22:38:08] - [step:          0] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[22:38:08] - [step:          0] loss:  1.877e+11
+[22:38:32] - [step:        100] loss:  3.637e+08, time/iteration:  2.401e+02 ms
+[22:38:55] - [step:        200] loss:  5.211e+07, time/iteration:  2.387e+02 ms
+[22:39:20] - [step:        300] loss:  8.785e+08, time/iteration:  2.423e+02 ms
+[22:39:44] - [step:        400] loss:  8.236e+07, time/iteration:  2.453e+02 ms
+[22:40:09] - [step:        500] loss:  5.854e+07, time/iteration:  2.439e+02 ms
+[22:40:33] - [step:        600] loss:  4.066e+07, time/iteration:  2.439e+02 ms
+[22:40:57] - [step:        700] loss:  1.089e+08, time/iteration:  2.453e+02 ms
+[22:41:22] - [step:        800] loss:  8.970e+07, time/iteration:  2.444e+02 ms
+[22:41:47] - [step:        900] loss:  7.117e+08, time/iteration:  2.470e+02 ms
+[22:42:12] - [step:       1000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[22:42:12] - [step:       1000] loss:  2.756e+07, time/iteration:  2.543e+02 ms
+[22:42:37] - [step:       1100] loss:  2.000e+07, time/iteration:  2.446e+02 ms
+[22:43:01] - [step:       1200] loss:  1.482e+07, time/iteration:  2.460e+02 ms
+[22:43:26] - [step:       1300] loss:  8.549e+07, time/iteration:  2.455e+02 ms
+[22:43:50] - [step:       1400] loss:  2.919e+07, time/iteration:  2.460e+02 ms
+[22:44:15] - [step:       1500] loss:  1.549e+08, time/iteration:  2.447e+02 ms
+[22:44:39] - [step:       1600] loss:  2.146e+07, time/iteration:  2.444e+02 ms
+[22:45:04] - [step:       1700] loss:  8.887e+07, time/iteration:  2.447e+02 ms
+[22:45:28] - [step:       1800] loss:  2.797e+08, time/iteration:  2.445e+02 ms
+[22:45:53] - [step:       1900] loss:  9.881e+07, time/iteration:  2.445e+02 ms
+[22:46:18] - [step:       2000] saved checkpoint to outputs/Forward_problem_FNO/ResSim
+[22:46:18] - [step:       2000] loss:  1.072e+08, time/iteration:  2.542e+02 ms
+[22:46:42] - [step:       2100] loss:  4.534e+07, time/iteration:  2.444e+02 ms
+[22:47:07] - [step:       2200] loss:  8.110e+07, time/iteration:  2.439e+02 ms
+[22:47:31] - [step:       2300] loss:  3.850e+07, time/iteration:  2.443e+02 ms
+[22:47:56] - [step:       2400] loss:  5.053e+07, time/iteration:  2.441e+02 ms
+[22:48:20] - [step:       2500] loss:  7.811e+07, time/iteration:  2.448e+02 ms
