@@ -19,9 +19,9 @@ PINI_MEAN_TE, PINI_STD_TE = 250.026, 6.7608
 T_MEAN_TE, T_STD_TE = 349.012, 30.6824
 TINI_MEAN_TE, TINI_STD_TE = 372.647, 10.8107
 
-# Expected Delta Stats based on the subtraction
-DP_MEAN_TE, DP_STD_TE = -96.459, 28.94  # Approx stats for Delta P
-DT_MEAN_TE, DT_STD_TE = -23.635, 32.53  # Approx stats for Delta T
+# EXACT Delta Stats from Training Logs (Test Set)
+DP_MEAN_TE, DP_STD_TE = -1779.2994, 45.2766
+DT_MEAN_TE, DT_STD_TE = -11.0853, 9.2635
 
 def load_data_and_model(checkpoint_path, test_data_path, device):
     print(f"\nLoading Test Data from {test_data_path}...")
