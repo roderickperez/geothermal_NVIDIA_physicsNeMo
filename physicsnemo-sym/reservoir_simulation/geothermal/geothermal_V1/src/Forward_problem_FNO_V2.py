@@ -124,31 +124,56 @@ def run(cfg: PhysicsNeMoConfig) -> None:
     )
 
     # ===================================================================
-    # [CRITICAL FIX] DELTA FORMULATION: AVOID MEAN COLLAPSE
+    # [CRITICAL FIX] DELTA FORMULATION: MATHEMATICALLY CORRECT
     # ===================================================================
-    def convert_to_delta(outvar, invar, target_key, ini_key, delta_key):
-        true_val = outvar[target_key]
-        ini_val = invar[ini_key]
+    def convert_to_delta_properly(outvar, invar, target_key, ini_key, delta_key, target_mean, target_std, ini_mean, ini_std):
+        true_norm = outvar[target_key]
+        ini_norm = invar[ini_key]
         
-        # Pini is [N, X, Y, Z]. True Pressure is [N, Time, X, Y, Z].
-        # We expand Pini to [N, 1, X, Y, Z] so it subtracts across all timesteps.
-        if ini_val.ndim == 4:
-            ini_val = np.expand_dims(ini_val, axis=1)
+        # 1. Un-normalize back to pure physical values
+        true_phys = true_norm * target_std + target_mean
+        ini_phys = ini_norm * ini_std + ini_mean
+        
+        # 2. Match time dimensions (expand Initial Condition across 30 steps)
+        if ini_phys.ndim == 4:
+            ini_phys = np.expand_dims(ini_phys, axis=1)
             
-        # Calculate Delta and assign to new key
-        outvar[delta_key] = true_val - ini_val
+        # 3. Calculate true physical Delta
+        delta_phys = true_phys - ini_phys
         
-        # Delete the absolute key so Modulus doesn't use it
+        # 4. Create new normalization specifically for the Delta
+        delta_mean = np.mean(delta_phys)
+        delta_std = np.std(delta_phys)
+        if delta_std == 0: delta_std = 1.0
+        
+        # 5. Save the cleanly normalized Delta for the network to learn
+        outvar[delta_key] = (delta_phys - delta_mean) / delta_std
+        
+        print(f"[*] {delta_key} STATS -> Mean: {delta_mean:.4f}, Std: {delta_std:.4f}")
+        
         del outvar[target_key]
+        return delta_mean, delta_std
 
-    # Convert Training Set
-    convert_to_delta(outvar_train_p, invar_train, "pressure", "Pini", "delta_pressure")
-    convert_to_delta(outvar_train_t, invar_train, "temperature", "Tini", "delta_temperature")
+    # --- Training Stats (From your logs) ---
+    P_MEAN_TR, P_STD_TR = 155.818, 26.6224
+    PINI_MEAN_TR, PINI_STD_TR = 249.433, 7.31539
+    T_MEAN_TR, T_STD_TR = 349.321, 30.4247
+    TINI_MEAN_TR, TINI_STD_TR = 372.725, 10.6776
 
-    # Convert Test Set
-    convert_to_delta(outvar_test_p, invar_test, "pressure", "Pini", "delta_pressure")
-    convert_to_delta(outvar_test_t, invar_test, "temperature", "Tini", "delta_temperature")
-    # ===================================================================
+    print("\n--- CONVERTING TRAINING SET TO DELTAS ---")
+    convert_to_delta_properly(outvar_train_p, invar_train, "pressure", "Pini", "delta_pressure", P_MEAN_TR, P_STD_TR, PINI_MEAN_TR, PINI_STD_TR)
+    convert_to_delta_properly(outvar_train_t, invar_train, "temperature", "Tini", "delta_temperature", T_MEAN_TR, T_STD_TR, TINI_MEAN_TR, TINI_STD_TR)
+
+    # --- Test Stats (From your logs) ---
+    P_MEAN_TE, P_STD_TE = 153.567, 28.1408
+    PINI_MEAN_TE, PINI_STD_TE = 250.026, 6.7608
+    T_MEAN_TE, T_STD_TE = 349.012, 30.6824
+    TINI_MEAN_TE, TINI_STD_TE = 372.647, 10.8107
+
+    print("\n--- CONVERTING TEST SET TO DELTAS ---")
+    convert_to_delta_properly(outvar_test_p, invar_test, "pressure", "Pini", "delta_pressure", P_MEAN_TE, P_STD_TE, PINI_MEAN_TE, PINI_STD_TE)
+    convert_to_delta_properly(outvar_test_t, invar_test, "temperature", "Tini", "delta_temperature", T_MEAN_TE, T_STD_TE, TINI_MEAN_TE, TINI_STD_TE)
+    print("===================================================================\n")
 
     # Initialize Datasets
     train_dataset_pressure = DictGridDataset(invar_train, outvar_train_p)
