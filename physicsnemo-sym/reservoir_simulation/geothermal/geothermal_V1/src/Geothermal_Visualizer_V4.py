@@ -13,27 +13,36 @@ MODELS_CONFIG = {
     "FNO_V2": {"checkpoint": "outputs/Forward_problem_FNO_V2/ResSim_V2", "tag": "FNO_V2"},
 }
 
-# --- STATS FROM YOUR LOGS (TEST DATA) ---
-P_MEAN_TE, P_STD_TE = 153.567, 28.1408
-PINI_MEAN_TE, PINI_STD_TE = 250.026, 6.7608
-T_MEAN_TE, T_STD_TE = 349.012, 30.6824
-TINI_MEAN_TE, TINI_STD_TE = 372.647, 10.8107
+# --- EXACT STATS FROM YOUR 60K LOGS ---
+DATA_STATS = {
+    "Training": {
+        "P_MEAN": 155.818, "P_STD": 26.6224,
+        "PINI_MEAN": 249.433, "PINI_STD": 7.31539,
+        "T_MEAN": 349.321, "T_STD": 30.4247,
+        "TINI_MEAN": 372.725, "TINI_STD": 10.6776,
+        "DP_MEAN": -1910.8816, "DP_STD": 53.7091,
+        "DT_MEAN": -10.8319, "DT_STD": 9.0834
+    },
+    "Test": {
+        "P_MEAN": 153.567, "P_STD": 28.1408,
+        "PINI_MEAN": 250.026, "PINI_STD": 6.7608,
+        "T_MEAN": 349.012, "T_STD": 30.6824,
+        "TINI_MEAN": 372.647, "TINI_STD": 10.8107,
+        "DP_MEAN": -1779.2994, "DP_STD": 45.2766,
+        "DT_MEAN": -11.0853, "DT_STD": 9.2635
+    }
+}
 
-# EXACT Delta Stats from Training Logs (Test Set)
-DP_MEAN_TE, DP_STD_TE = -1779.2994, 45.2766
-DT_MEAN_TE, DT_STD_TE = -11.0853, 9.2635
-
-def load_data_and_model(checkpoint_path, test_data_path, device):
-    print(f"\nLoading Test Data from {test_data_path}...")
-    if test_data_path.endswith(".mat"):
+def load_data_and_model(checkpoint_path, data_path, device):
+    print(f"\nLoading Data from {data_path}...")
+    if data_path.endswith(".mat"):
         from utilities import preprocess_FNO_mat
-        preprocess_FNO_mat(test_data_path)
-        test_data_path = test_data_path.replace(".mat", ".hdf5")
+        preprocess_FNO_mat(data_path)
+        data_path = data_path.replace(".mat", ".hdf5")
 
     input_keys = ["perm", "Q", "Qw", "Phi", "Time", "Pini", "Tini"]
-    inv, out_p, out_t = load_FNO_dataset2(test_data_path, input_keys, ["pressure"], ["temperature"], n_examples=None)
+    inv, out_p, out_t = load_FNO_dataset2(data_path, input_keys, ["pressure"], ["temperature"], n_examples=None)
 
-    # V2 Architecture targeting Deltas
     steppi = 30
     decoder_p = ConvFullyConnectedArch([Key("z", size=32)], [Key("delta_pressure", size=steppi)])
     model_p = FNOArch([Key(k, size=1) for k in input_keys], fno_modes=[16,16,2], dimension=3, padding=11, nr_fno_layers=4, decoder_net=decoder_p).to(device)
@@ -41,7 +50,6 @@ def load_data_and_model(checkpoint_path, test_data_path, device):
     decoder_t = ConvFullyConnectedArch([Key("z", size=32)], [Key("delta_temperature", size=steppi)])
     model_t = FNOArch([Key(k, size=1) for k in input_keys], fno_modes=[16,16,2], dimension=3, padding=11, nr_fno_layers=4, decoder_net=decoder_t).to(device)
 
-    # Load Weights
     base_dir = checkpoint_path if os.path.isdir(checkpoint_path) else os.path.dirname(checkpoint_path)
     p_path = os.path.join(base_dir, "fno_forward_model_delta_pressure.0.pth")
     t_path = os.path.join(base_dir, "fno_forward_model_delta_temperature.0.pth")
@@ -57,7 +65,6 @@ def load_data_and_model(checkpoint_path, test_data_path, device):
     return inv, out_p, out_t, model_p, model_t
 
 def find_dynamic_wells(inv, idx):
-    """Dynamically finds well locations by scanning the Source/Sink (Q) matrix."""
     q_norm = inv["Q"][idx]
     if q_norm.ndim == 4: q_norm = q_norm[0]
     
@@ -73,7 +80,7 @@ def find_dynamic_wells(inv, idx):
                 wells.append((x, y, w_type))
     return wells
 
-def predict_and_unnormalize(inv, out_p, out_t, model_p, model_t, idx, device):
+def predict_and_unnormalize(inv, out_p, out_t, model_p, model_t, idx, stats, device):
     model_p.eval()
     model_t.eval()
     batch = {k: torch.from_numpy(v[idx:idx+1]).to(device) for k, v in inv.items()}
@@ -90,21 +97,21 @@ def predict_and_unnormalize(inv, out_p, out_t, model_p, model_t, idx, device):
     if pini_norm.ndim == 3: pini_norm = np.expand_dims(pini_norm, axis=0)
     if tini_norm.ndim == 3: tini_norm = np.expand_dims(tini_norm, axis=0)
 
-    # 1. Un-normalize the Delta back to Physical Bar/Kelvin
-    pred_delta_p_phys = pred_delta_p_norm * DP_STD_TE + DP_MEAN_TE
-    pred_delta_t_phys = pred_delta_t_norm * DT_STD_TE + DT_MEAN_TE
+    # 1. Un-normalize the Delta
+    pred_delta_p_phys = pred_delta_p_norm * stats["DP_STD"] + stats["DP_MEAN"]
+    pred_delta_t_phys = pred_delta_t_norm * stats["DT_STD"] + stats["DT_MEAN"]
 
     # 2. Un-normalize the Initial Condition
-    pini_phys = pini_norm * PINI_STD_TE + PINI_MEAN_TE
-    tini_phys = tini_norm * TINI_STD_TE + TINI_MEAN_TE
+    pini_phys = pini_norm * stats["PINI_STD"] + stats["PINI_MEAN"]
+    tini_phys = tini_norm * stats["TINI_STD"] + stats["TINI_MEAN"]
 
-    # 3. Final Absolute Prediction (Phys + Phys)
+    # 3. Final Absolute Prediction
     pred_p_phys = pini_phys + pred_delta_p_phys
     pred_t_phys = tini_phys + pred_delta_t_phys
 
-    # 4. Un-normalize Ground Truth for comparison
-    true_p_phys = true_p_norm * P_STD_TE + P_MEAN_TE
-    true_t_phys = true_t_norm * T_STD_TE + T_MEAN_TE
+    # 4. Un-normalize Ground Truth
+    true_p_phys = true_p_norm * stats["P_STD"] + stats["P_MEAN"]
+    true_t_phys = true_t_norm * stats["T_STD"] + stats["T_MEAN"]
 
     # Convert Temp to Celsius
     pred_t_phys -= 273.15
@@ -119,7 +126,7 @@ def predict_and_unnormalize(inv, out_p, out_t, model_p, model_t, idx, device):
 
     return true_p_phys, pred_p_phys, true_t_phys, pred_t_phys
 
-def plot_slice(model_name, true_vol, pred_vol, layer, var_name, out_dir, dynamic_wells, idx):
+def plot_slice(model_name, true_vol, pred_vol, layer, var_name, out_dir, dynamic_wells, idx, dataset_type):
     true_slice = true_vol[-1]
     pred_slice = pred_vol[-1]
     diff_slice = np.abs(true_slice - pred_slice)
@@ -158,25 +165,34 @@ def plot_slice(model_name, true_vol, pred_vol, layer, var_name, out_dir, dynamic
     draw(axes[2,1], in_d, f"Diff Inline", is_diff=True)
     draw(axes[2,2], xl_d, f"Diff Xline", is_diff=True)
 
-    plt.suptitle(f"{model_name} V2 Delta | {var_name} | Sample {idx} Final Step", fontsize=14)
+    plt.suptitle(f"{model_name} V2 Delta | {dataset_type} Data (Idx {idx}) | {var_name} | Final Step", fontsize=14)
     plt.tight_layout()
-    plt.savefig(os.path.join(out_dir, f"V4_Viz_{var_name}_Idx{idx}.png"))
+    plt.savefig(os.path.join(out_dir, f"V4_Viz_{dataset_type}_{var_name}_Idx{idx}.png"))
     plt.close()
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--data", type=str, default="../PACKETS/Test4.mat")
+    parser.add_argument("--idx", type=int, default=0)
+    args = parser.parse_args()
+
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     out_dir = "COMPARE_RESULTS/V4_Delta_Viz"
     os.makedirs(out_dir, exist_ok=True)
 
-    inv, out_p, out_t, mod_p, mod_t = load_data_and_model("outputs/Forward_problem_FNO_V2/ResSim_V2", "../PACKETS/Test4.mat", device)
+    # Auto-detect which stats to use based on the file name
+    dataset_type = "Training" if "Training" in args.data else "Test"
+    stats_to_use = DATA_STATS[dataset_type]
+
+    inv, out_p, out_t, mod_p, mod_t = load_data_and_model("outputs/Forward_problem_FNO_V2/ResSim_V2", args.data, device)
     
     if mod_p:
-        idx = 0
+        idx = args.idx
         dyn_wells = find_dynamic_wells(inv, idx)
         print(f"Dynamically located {len(dyn_wells)} active wells.")
 
-        true_p, pred_p, true_t, pred_t = predict_and_unnormalize(inv, out_p, out_t, mod_p, mod_t, idx, device)
+        true_p, pred_p, true_t, pred_t = predict_and_unnormalize(inv, out_p, out_t, mod_p, mod_t, idx, stats_to_use, device)
 
-        plot_slice("FNO", true_p, pred_p, 2, "Pressure", out_dir, dyn_wells, idx)
-        plot_slice("FNO", true_t, pred_t, 2, "Temperature", out_dir, dyn_wells, idx)
-        print(f"Saved perfectly aligned physical plots to {out_dir}")
+        plot_slice("FNO", true_p, pred_p, 2, "Pressure", out_dir, dyn_wells, idx, dataset_type)
+        plot_slice("FNO", true_t, pred_t, 2, "Temperature", out_dir, dyn_wells, idx, dataset_type)
+        print(f"Saved perfectly aligned physical plots for {dataset_type} data to {out_dir}")
